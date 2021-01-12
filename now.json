@@ -1,0 +1,44 @@
+{
+    "version": 2,
+    "name": "vercel_python_api_template",
+    "builds": [
+        {
+            "src": "static/*",
+            "use": "@vercel/static"
+        },
+        {
+            "src": "static/js/*",
+            "use": "@vercel/static"
+        },
+        {
+            "src": "static/css/*",
+            "use": "@vercel/static"
+        },
+        {
+            "src": "api/__main__.py",
+            "use": "@now/python@canary"
+        } 
+    ],
+    "routes": [
+        {
+            "src": "/.*",
+            "dest": "/api/__main__.py",
+            "headers": {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+                "RetryLife-Service-Source": "lambda",
+                "Access-Control-Allow-Credentials": "true"
+            }
+        },
+        {
+            "src": "/",
+            "dest": "/api/__main__.py",
+            "headers": {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+                "RetryLife-Service-Source": "lambda",
+                "Access-Control-Allow-Credentials": "true"
+            }
+        }
+    ]
+}
