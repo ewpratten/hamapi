@@ -7,8 +7,11 @@ import traceback
 def doCallsignQuery(callsign: str) -> dict:
 
     # Get all spots
-    spots = list(getRBNSpotsForCall(callsign))
+    spots = []
+    spots += list(getRBNSpotsForCall(callsign))
+    spots += list(getRBNSpotsForCall(callsign + "/QRP"))
     spots += list(getDXCCSpotsForCall(callsign))
+    spots += list(getDXCCSpotsForCall(callsign + "/QRP"))
 
     try:
         # Get QRZ info
