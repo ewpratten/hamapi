@@ -1,6 +1,7 @@
 from .rbn import getRBNSpotsForCall, getDXCCSpotsForCall
 from .qrz import getQRZInfoForCall
 from .hamqth import getHamQTHInfoForCall
+import traceback
 
 
 def doCallsignQuery(callsign: str) -> dict:
@@ -9,12 +10,18 @@ def doCallsignQuery(callsign: str) -> dict:
     spots = list(getRBNSpotsForCall(callsign))
     spots += list(getDXCCSpotsForCall(callsign))
 
-    # Get QRZ info
-    qrz_info = getQRZInfoForCall(callsign)
+    try:
+        # Get QRZ info
+        qrz_info = getQRZInfoForCall(callsign)
 
-    # Get HamQTH info
-    hamqth_info = getHamQTHInfoForCall(callsign)
-
+        # Get HamQTH info
+        hamqth_info = getHamQTHInfoForCall(callsign)
+    except IndexError as e:
+        print("An IndexError occurred. Likely was due to this callsign not being valid")
+        traceback.print_tb(e.__traceback__)
+        return "Callsign not found"
+    
+    
     return {
         "name": hamqth_info.name,
         "lookups": qrz_info.lookups + hamqth_info.lookups,

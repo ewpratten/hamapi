@@ -4,6 +4,7 @@ import requests
 
 
 from .callsign import doCallsignQuery
+from .propagation import doPropagationReport
 
 # Set up an app
 app = Webapp(__name__, static_directory="static", google_tracking_code=None)
@@ -34,6 +35,18 @@ def handleCallsign(callsign):
         }
     )
 
+@app.route("/propagation")
+def handlePropagation():
+    
+    # Fetch propagation data
+    data = doPropagationReport()
+    
+    return flask.jsonify(
+        {
+            "success": True,
+            "info": data
+        }
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)
