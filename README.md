@@ -1,2 +1,3 @@
-# vercel_python_api_template
-A template repository for vercel-hosted Python APIs
+# Ham API
+
+This is an in-progress REST API for all things ham radio. Breaking changes should be expected.
