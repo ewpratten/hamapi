@@ -28,12 +28,34 @@ def handleCallsign(callsign):
                 "error": result
             }
         )
-    return flask.jsonify(
+    res = flask.make_response(flask.jsonify(
         {
             "success": True,
             "info": result
         }
-    )
+    ))
+    res.headers.set('Cache-Control', 's-maxage=60, stale-while-revalidate')
+    return res
+    
+@app.route("/callsign/<callsign>/badges/lookups")
+def handleCallignLookupBadge(callsign):
+
+    result = doCallsignQuery(callsign)
+
+    if type(result) != dict:
+        return flask.jsonify(
+            {
+                "success": False,
+                "error": result
+            }
+        ), 404
+    
+    
+    res = flask.make_response("",302)
+    lookups = result["lookups"]
+    res.headers["Location"] = f"https://img.shields.io/badge/lookups-{lookups}-green"
+    res.headers.set('Cache-Control', 's-maxage=60, stale-while-revalidate')
+    return res
 
 @app.route("/propagation")
 def handlePropagation():
@@ -41,12 +63,14 @@ def handlePropagation():
     # Fetch propagation data
     data = doPropagationReport()
     
-    return flask.jsonify(
+    res = flask.make_response(flask.jsonify(
         {
             "success": True,
             "info": data
         }
-    )
+    ))
+    res.headers.set('Cache-Control', 's-maxage=60, stale-while-revalidate')
+    return res
 
 if __name__ == "__main__":
     app.run(debug=True)

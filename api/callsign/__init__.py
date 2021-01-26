@@ -28,6 +28,7 @@ def doCallsignQuery(callsign: str) -> dict:
     return {
         "name": hamqth_info.name,
         "lookups": qrz_info.lookups + hamqth_info.lookups,
+        "propagation":f"https://pskreporter.info/pskmap.html?preset&callsign={callsign.capitalize()}&txrx=tx&timerange=86400&hideunrec=1&blankifnone=1&showsnr=1&hidemax=1&showlines=1",
         "location": {
             "country": {
                 "name": qrz_info.country,
