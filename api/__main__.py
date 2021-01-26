@@ -53,7 +53,7 @@ def handleCallignLookupBadge(callsign):
     
     res = flask.make_response("",302)
     lookups = result["lookups"]
-    res.headers["Location"] = f"https://img.shields.io/badge/lookups-{lookups}-green"
+    res.headers["Location"] = f"https://img.shields.io/badge/total-lookups-{lookups}-green"
     res.headers.set('Cache-Control', 's-maxage=60, stale-while-revalidate')
     return res
 
