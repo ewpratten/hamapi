@@ -5,6 +5,7 @@ import requests
 
 from .callsign import doCallsignQuery
 from .propagation import doPropagationReport
+from .contests import getContestNames
 
 # Set up an app
 app = Webapp(__name__, static_directory="static", google_tracking_code=None)
@@ -67,6 +68,26 @@ def handlePropagation():
         {
             "success": True,
             "info": data
+        }
+    ))
+    res.headers.set('Cache-Control', 's-maxage=60, stale-while-revalidate')
+    return res
+
+@app.route("/contests/names")
+def handleContestNames():
+
+    result = getContestNames()
+
+    if type(result) == None:
+        return flask.jsonify(
+            {
+                "success": False
+            }
+        )
+    res = flask.make_response(flask.jsonify(
+        {
+            "success": True,
+            "info": result
         }
     ))
     res.headers.set('Cache-Control', 's-maxage=60, stale-while-revalidate')
