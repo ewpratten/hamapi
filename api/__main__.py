@@ -5,7 +5,7 @@ import requests
 
 from .callsign import doCallsignQuery
 from .propagation import doPropagationReport
-from .contests import getContestNames
+from .contests import *
 
 # Set up an app
 app = Webapp(__name__, static_directory="static", google_tracking_code=None)
@@ -90,6 +90,29 @@ def handleContestNames():
             "info": result
         }
     ))
+    res.headers.set('Cache-Control', 's-maxage=60, stale-while-revalidate')
+    return res
+
+
+@app.route("/contests/weekly")
+def handleWeeklyContests():
+
+    result = getWeeklyContests()
+    
+    res = flask.make_response(flask.jsonify(
+        {
+            "success": True,
+            "info": result
+        }
+    ))
+    res.headers.set('Cache-Control', 's-maxage=60, stale-while-revalidate')
+    return res
+
+@app.route("/contests/id/<int:id>/html")
+def handleHTMLContestByID(id: int):
+    
+    res = flask.make_response("", 302)
+    res.headers.set('Location', f"https://www.contestcalendar.com/contestdetails.php?ref={id}")
     res.headers.set('Cache-Control', 's-maxage=60, stale-while-revalidate')
     return res
 
